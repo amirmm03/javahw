@@ -38,7 +38,7 @@ public class SAs implements BranchPredictor {
     @Override
     public BranchResult predict(BranchInstruction branchInstruction) {
         // TODO: complete Task 1
-        return BranchResult.NOT_TAKEN;
+        return BranchResult.TAKEN;
     }
 
     @Override
