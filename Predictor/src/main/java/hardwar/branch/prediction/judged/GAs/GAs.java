@@ -71,7 +71,7 @@ public class GAs implements BranchPredictor {
     public void update(BranchInstruction branchInstruction, BranchResult actual) {
         // TODO: complete Task 2
 
-        PSPHT.put(CombinationalLogic.hash(this.getCacheEntry(branchInstruction.getInstructionAddress()), this.KSize, hashMode), CombinationalLogic.count(SC.read(), BranchResult.isTaken(actual), CountMode.SATURATING));
+        PSPHT.put(CombinationalLogic.hash(this.getCacheEntry(branchInstruction.getInstructionAddress()), this.KSize, this.hashMode), CombinationalLogic.count(SC.read(), BranchResult.isTaken(actual), CountMode.SATURATING));
     }
 
     /**
