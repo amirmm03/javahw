@@ -63,6 +63,9 @@ public class PAp implements BranchPredictor {
 
 
         Bit[] add =PABHR.read(instruction.getInstructionAddress()).read();
+        
+        PAPHT.putIfAbsent(add,getDefaultBlock());
+
         PAPHT.put(add , CombinationalLogic.count(SC.read(),n,CountMode.SATURATING));
 
 
