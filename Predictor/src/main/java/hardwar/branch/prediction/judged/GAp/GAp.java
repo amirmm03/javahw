@@ -52,14 +52,13 @@ public class GAp implements BranchPredictor {
         int index = 0;
 
         Bit[] add = getCacheEntry(branchInstruction.getInstructionAddress());
+        PAPHT.putIfAbsent(add,getDefaultBlock());
 
         Bit[]read = PAPHT.get(add);
 
-        if(read == null){
-            SC.load(getDefaultBlock());
-        }else {
-            SC.load(read);
-        }
+
+        SC.load(read);
+
 
         if (SC.read()[0].getValue())
             return BranchResult.TAKEN;
