@@ -1,5 +1,6 @@
 package hardwar.branch.prediction.judged.GAp;
 
+import com.sun.net.httpserver.Authenticator;
 import hardwar.branch.prediction.shared.*;
 import hardwar.branch.prediction.shared.devices.*;
 
@@ -25,17 +26,17 @@ public class GAp implements BranchPredictor {
      */
     public GAp(int BHRSize, int SCSize, int branchInstructionSize) {
         // TODO: complete the constructor
-        this.branchInstructionSize = 0;
+        this.branchInstructionSize = branchInstructionSize;
 
         // Initialize the BHR register with the given size and no default value
-        this.BHR = null;
+        this.BHR = new SIPORegister("bhr",BHRSize,null);
 
         // Initializing the PAPHT with BranchInstructionSize as PHT Selector and 2^BHRSize row as each PHT entries
         // number and SCSize as block size
-        PAPHT = null;
+        PAPHT = new PerAddressPredictionHistoryTable(branchInstructionSize,1<<BHRSize ,SCSize);
 
         // Initialize the SC register
-        SC = null;
+        SC = new SIPORegister("",SCSize,null);
     }
 
     /**
@@ -47,7 +48,22 @@ public class GAp implements BranchPredictor {
     @Override
     public BranchResult predict(BranchInstruction branchInstruction) {
         // TODO: complete Task 1
+
+        int index = 0;
+
+
+        Bit[]read = PAPHT.get( getCacheEntry(branchInstruction.getInstructionAddress()));
+
+        if(read == null){
+            SC.load(getDefaultBlock());
+        }else {
+            SC.load(read);
+        }
+
+        if (SC.read()[0].getValue())
+            return BranchResult.TAKEN;
         return BranchResult.NOT_TAKEN;
+
     }
 
     /**
@@ -59,6 +75,21 @@ public class GAp implements BranchPredictor {
     @Override
     public void update(BranchInstruction branchInstruction, BranchResult actual) {
         // TODO : complete Task 2
+        boolean n;
+        n = actual.equals(BranchResult.TAKEN);
+
+
+
+
+
+        CombinationalLogic.count(SC.read(),n,CountMode.SATURATING);
+
+        //SC.load();
+
+        PAPHT.put(getCacheEntry(branchInstruction.getInstructionAddress()), CombinationalLogic.count(SC.read(),n,CountMode.SATURATING));
+
+
+        BHR.insert(Bit.of(n));
     }
 
 
