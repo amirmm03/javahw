@@ -58,6 +58,17 @@ public class PAp implements BranchPredictor {
     @Override
     public void update(BranchInstruction instruction, BranchResult actual) {
         // TODO:complete Task 2
+        boolean n;
+        n = actual.equals(BranchResult.TAKEN);
+
+
+        PAPHT.put(PABHR.read(instruction.getInstructionAddress()).read(), CombinationalLogic.count(SC.read(),n,CountMode.SATURATING));
+        
+
+
+        ShiftRegister nn = PABHR.read(instruction.getInstructionAddress());
+        nn.insert(Bit.of(n));
+        PABHR.write(instruction.getInstructionAddress() , nn.read());
     }
 
 
