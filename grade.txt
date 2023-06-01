@@ -1,13 +1,13 @@
-Thu Jun  1 13:02:09 UTC 2023
+Thu Jun  1 13:04:36 UTC 2023
 GAg: 
 Test passed, 1000 out of 1000 assertions passed
 
 GAp: 
 Test passed, 1000 out of 1000 assertions passed
 
-Exception in thread "main" java.lang.NullPointerException: Cannot invoke "hardwar.branch.prediction.shared.devices.Cache.get(Object)" because "PHT" is null
-	at hardwar.branch.prediction.shared.devices.PerAddressPredictionHistoryTable.get(PerAddressPredictionHistoryTable.java:60)
-	at hardwar.branch.prediction.shared.devices.PerAddressPredictionHistoryTable.get(PerAddressPredictionHistoryTable.java:31)
+Exception in thread "main" java.lang.NullPointerException
+	at java.base/java.lang.System.arraycopy(Native Method)
+	at hardwar.branch.prediction.shared.devices.SIPORegister.load(SIPORegister.java:65)
 	at hardwar.branch.prediction.judged.GAs.GAs.predict(GAs.java:59)
 	at hardwar.branch.prediction.judge.PredictorSimulator.lambda$simulate$0(PredictorSimulator.java:27)
 	at java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)
