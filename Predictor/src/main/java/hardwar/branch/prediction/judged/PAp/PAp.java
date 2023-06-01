@@ -29,15 +29,25 @@ public class PAp implements BranchPredictor {
 
         // Initializing the PAPHT with BranchInstructionSize as PHT Selector and 2^BHRSize row as each PHT entries
         // number and SCSize as block size
-        PAPHT = null;
 
+        PAPHT = new PerAddressPredictionHistoryTable(branchInstructionSize,1<<BHRSize ,SCSize);
         // Initialize the SC register
-        SC = null;
+        SC = new SIPORegister("",SCSize,null);
     }
 
     @Override
     public BranchResult predict(BranchInstruction branchInstruction) {
         // TODO: complete Task 1
+        PAPHT.putIfAbsent(PABHR.read(instruction.getInstructionAddress()).read() , getDefaultBlock());
+
+        Bit[]read = PHT.get(PABHR.read(instruction.getInstructionAddress()).read());
+
+
+        SC.load(read);
+
+
+        if (SC.read()[0].getValue())
+            return BranchResult.TAKEN;
         return BranchResult.NOT_TAKEN;
     }
 
