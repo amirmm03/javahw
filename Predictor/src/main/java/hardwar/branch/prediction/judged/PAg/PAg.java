@@ -73,6 +73,8 @@ public class PAg implements BranchPredictor {
         ShiftRegister nn = PABHR.read(instruction.getInstructionAddress());
         nn.insert(Bit.of(n));
         PABHR.write(instruction.getInstructionAddress() , nn.read());
+
+
     }
 
     /**

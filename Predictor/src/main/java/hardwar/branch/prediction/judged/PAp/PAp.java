@@ -64,7 +64,7 @@ public class PAp implements BranchPredictor {
 
         Bit[] add =PABHR.read(instruction.getInstructionAddress()).read();
         if(add==null)
-            add = getDefaultBlock();
+            add = getCacheEntry(instruction.getInstructionAddress(),PABHR.read(instruction.getInstructionAddress()).read());
 
         PAPHT.putIfAbsent(add,getDefaultBlock());
 
