@@ -51,8 +51,9 @@ public class GAp implements BranchPredictor {
 
         int index = 0;
 
+        Bit[] add = getCacheEntry(branchInstruction.getInstructionAddress());
 
-        Bit[]read = PAPHT.get( getCacheEntry(branchInstruction.getInstructionAddress()));
+        Bit[]read = PAPHT.get(add);
 
         if(read == null){
             SC.load(getDefaultBlock());
@@ -78,11 +79,6 @@ public class GAp implements BranchPredictor {
         boolean n;
         n = actual.equals(BranchResult.TAKEN);
 
-
-
-
-
-        CombinationalLogic.count(SC.read(),n,CountMode.SATURATING);
 
         //SC.load();
 

@@ -66,13 +66,6 @@ public class GAg implements BranchPredictor {
         n = actual.equals(BranchResult.TAKEN);
 
 
-
-
-
-        CombinationalLogic.count(SC.read(),n,CountMode.SATURATING);
-
-        //SC.load();
-
         PHT.put(BHR.read(), CombinationalLogic.count(SC.read(),n,CountMode.SATURATING));
 
 
