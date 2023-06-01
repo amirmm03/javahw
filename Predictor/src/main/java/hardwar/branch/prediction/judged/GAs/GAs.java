@@ -55,7 +55,7 @@ public class GAs implements BranchPredictor {
     public BranchResult predict(BranchInstruction branchInstruction) {
         // TODO: complete Task 1
         Bit[] fuck = this.getCacheEntry(branchInstruction.getInstructionAddress());
-        PSPHT.putIfAbsent(fuck, getDefaultBlock());
+        PSPHT.putIfAbsent(CombinationalLogic.hash(fuck, this.KSize, hashMode), getDefaultBlock());
         SC.load(PSPHT.get(CombinationalLogic.hash(fuck, this.KSize, hashMode)));
         return BranchResult.of(SC.read()[0].getValue());
         //return BranchResult.NOT_TAKEN;
