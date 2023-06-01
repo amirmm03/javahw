@@ -21,19 +21,18 @@ public class PAs implements BranchPredictor {
 
     public PAs(int BHRSize, int SCSize, int branchInstructionSize, int KSize, HashMode hashMode) {
         // TODO: complete the constructor
-        this.branchInstructionSize = 0;
-        this.KSize = 0;
+        this.branchInstructionSize = branchInstructionSize;
+        this.KSize = KSize;
         this.hashMode = HashMode.XOR;
-
         // Initialize the PABHR with the given bhr and branch instruction size
-        PABHR = null;
+        PABHR = new RegisterBank(branchInstructionSize, BHRSize);
 
         // Initializing the PAPHT with K bit as PHT selector and 2^BHRSize row as each PHT entries
         // number and SCSize as block size
-        PSPHT = null;
+        PSPHT = new PerAddressPredictionHistoryTable(KSize, 1<<BHRSize, SCSize);
 
         // Initialize the saturating counter
-        SC = null;
+        SC = new SIPORegister("sc", SCSize, null);
     }
 
     /**
@@ -45,13 +44,25 @@ public class PAs implements BranchPredictor {
      */
     @Override
     public BranchResult predict(BranchInstruction branchInstruction) {
+        Bit[] reg = PABHR.read(branchInstruction.getInstructionAddress()).read();
+        Bit[] fuck = this.getCacheEntry(branchInstruction.getInstructionAddress(), reg);
+        PSPHT.putIfAbsent(fuck, getDefaultBlock());
+        SC.load(PSPHT.get(fuck));
+        return BranchResult.of(SC.read()[0].getValue());
         // TODO: complete Task 1
-        return BranchResult.NOT_TAKEN;
+        //return BranchResult.NOT_TAKEN;
     }
 
     @Override
     public void update(BranchInstruction instruction, BranchResult actual) {
         // TODO:complete Task 2
+        Bit[] reg = PABHR.read(instruction.getInstructionAddress()).read();
+        Bit[] fuck = this.getCacheEntry(instruction.getInstructionAddress(), reg);
+        Bit[] count = CombinationalLogic.count(SC.read(), BranchResult.isTaken(actual), CountMode.SATURATING);
+        PSPHT.put(fuck, count);
+        ShiftRegister each = PABHR.read(reg);
+        each.insert(Bit.of(BranchResult.isTaken(actual)));
+        PABHR.write(reg, each.read());
     }
 
     @Override
