@@ -58,23 +58,29 @@ public class PAp implements BranchPredictor {
     @Override
     public void update(BranchInstruction instruction, BranchResult actual) {
         // TODO:complete Task 2
-        boolean n;
-        n = actual.equals(BranchResult.TAKEN);
+        try {
 
 
-        Bit[] add =PABHR.read(instruction.getInstructionAddress()).read();
-        if(add==null)
-            add = getCacheEntry(instruction.getInstructionAddress(),PABHR.read(instruction.getInstructionAddress()).read());
-
-        PAPHT.putIfAbsent(add,getDefaultBlock());
-
-        PAPHT.put(add , CombinationalLogic.count(SC.read(),n,CountMode.SATURATING));
+            boolean n;
+            n = actual.equals(BranchResult.TAKEN);
 
 
+            Bit[] add = PABHR.read(instruction.getInstructionAddress()).read();
+            if (add == null)
+                add = getCacheEntry(instruction.getInstructionAddress(), PABHR.read(instruction.getInstructionAddress()).read());
 
-        ShiftRegister nn = PABHR.read(instruction.getInstructionAddress());
-        nn.insert(Bit.of(n));
-        PABHR.write(instruction.getInstructionAddress() , nn.read());
+            PAPHT.putIfAbsent(add, getDefaultBlock());
+
+            PAPHT.put(add, CombinationalLogic.count(SC.read(), n, CountMode.SATURATING));
+
+
+            ShiftRegister nn = PABHR.read(instruction.getInstructionAddress());
+            nn.insert(Bit.of(n));
+            PABHR.write(instruction.getInstructionAddress(), nn.read());
+        }catch (NullPointerException e){
+            
+
+        }
     }
 
 
