@@ -19,27 +19,36 @@ public class SAg implements BranchPredictor {
 
     public SAg(int BHRSize, int SCSize, int branchInstructionSize, int KSize) {
         // TODO: complete the constructor
-        this.branchInstructionSize = 0;
-        this.KSize = 0;
+        this.branchInstructionSize = branchInstructionSize;
+        this.KSize = KSize;
 
         // Initialize the PABHR with the given bhr and Ksize
-        PSBHR = null;
+        PSBHR = new RegisterBank(KSize, BHRSize);
 
         // Initialize the PHT with a size of 2^size and each entry having a saturating counter of size "SCSize"
-        PHT = null;
+        PHT = new PageHistoryTable(1<<BHRSize ,SCSize);
 
         // Initialize the SC register
-        SC = null;
+        SC = new SIPORegister("sc", SCSize, null);
     }
 
     @Override
     public BranchResult predict(BranchInstruction instruction) {
-        // TODO: complete Task 1
-        return BranchResult.NOT_TAKEN;
+        //PHT.putIfAbsent(PABHR.read(instruction.getInstructionAddress()).read() , getDefaultBlock());
+        ShiftRegister reg = PSBHR.read(this.getRBAddressLine(instruction.getInstructionAddress()));
+        PHT.putIfAbsent(reg.read(), getDefaultBlock());
+        Bit[] read = PHT.get(reg.read());
+        SC.load(read);
+        return BranchResult.of(SC.read()[0].getValue());
+        //Bit[]read = PHT.get(PABHR.read(instruction.getInstructionAddress()).read());
     }
 
     @Override
     public void update(BranchInstruction branchInstruction, BranchResult actual) {
+        ShiftRegister reg = PSBHR.read(this.getRBAddressLine(branchInstruction.getInstructionAddress()));
+        PHT.put(reg.read(), CombinationalLogic.count(SC.read(), BranchResult.isTaken(actual), CountMode.SATURATING));
+        reg.insert(Bit.of(BranchResult.isTaken(actual)));
+        PSBHR.write(this.getRBAddressLine(branchInstruction.getInstructionAddress()), reg.read());
         // TODO: complete Task 2
     }
 
