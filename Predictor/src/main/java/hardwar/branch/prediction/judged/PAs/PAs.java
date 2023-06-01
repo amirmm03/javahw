@@ -60,9 +60,9 @@ public class PAs implements BranchPredictor {
         Bit[] fuck = this.getCacheEntry(instruction.getInstructionAddress(), reg);
         Bit[] count = CombinationalLogic.count(SC.read(), BranchResult.isTaken(actual), CountMode.SATURATING);
         PSPHT.put(fuck, count);
-        ShiftRegister each = PABHR.read(reg);
+        ShiftRegister each = PABHR.read(instruction.getInstructionAddress());
         each.insert(Bit.of(BranchResult.isTaken(actual)));
-        PABHR.write(reg, each.read());
+        PABHR.write(instruction.getInstructionAddress(), each.read());
     }
 
     @Override
