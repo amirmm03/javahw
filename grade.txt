@@ -1,4 +1,4 @@
-Thu Jun  1 13:48:03 UTC 2023
+Thu Jun  1 13:52:03 UTC 2023
 GAg: 
 Test passed, 1000 out of 1000 assertions passed
 
@@ -23,7 +23,7 @@ Exception in thread "main" java.lang.NullPointerException
 	at hardwar.branch.prediction.shared.devices.PerAddressPredictionHistoryTable.getCacheSelector(PerAddressPredictionHistoryTable.java:130)
 	at hardwar.branch.prediction.shared.devices.PerAddressPredictionHistoryTable.putIfAbsent(PerAddressPredictionHistoryTable.java:99)
 	at hardwar.branch.prediction.shared.devices.PerAddressPredictionHistoryTable.putIfAbsent(PerAddressPredictionHistoryTable.java:31)
-	at hardwar.branch.prediction.judged.PAp.PAp.update(PAp.java:67)
+	at hardwar.branch.prediction.judged.PAp.PAp.update(PAp.java:69)
 	at hardwar.branch.prediction.judge.PredictorSimulator.lambda$simulate$0(PredictorSimulator.java:28)
 	at java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)
 	at java.base/java.util.stream.Streams$RangeIntSpliterator.forEachRemaining(Streams.java:104)
@@ -39,8 +39,8 @@ PAs:
 Test passed, 1000 out of 1000 assertions passed
 
 SAg: 
-Exception in thread "main" hardwar.branch.prediction.judge.TestFailedException: Test failed, 114 out of 1000 assertions passed
-	at hardwar.branch.prediction.judge.Judge.main(Judge.java:39)
+Test passed, 1000 out of 1000 assertions passed
+
 SAp: 
 Exception in thread "main" hardwar.branch.prediction.judge.TestFailedException: Test failed, 342 out of 1000 assertions passed
 	at hardwar.branch.prediction.judge.Judge.main(Judge.java:39)
