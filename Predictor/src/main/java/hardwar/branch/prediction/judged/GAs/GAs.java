@@ -55,8 +55,8 @@ public class GAs implements BranchPredictor {
     public BranchResult predict(BranchInstruction branchInstruction) {
         // TODO: complete Task 1
         Bit[] fuck = this.getCacheEntry(branchInstruction.getInstructionAddress());
-        PSPHT.putIfAbsent(CombinationalLogic.hash(fuck, this.KSize, hashMode), getDefaultBlock());
-        SC.load(PSPHT.get(CombinationalLogic.hash(fuck, this.KSize, hashMode)));
+        PSPHT.putIfAbsent(fuck, getDefaultBlock());
+        SC.load(PSPHT.get(fuck));
         return BranchResult.of(SC.read()[0].getValue());
         //return BranchResult.NOT_TAKEN;
     }
@@ -70,8 +70,11 @@ public class GAs implements BranchPredictor {
     @Override
     public void update(BranchInstruction branchInstruction, BranchResult actual) {
         // TODO: complete Task 2
-
-        PSPHT.put(CombinationalLogic.hash(this.getCacheEntry(branchInstruction.getInstructionAddress()), this.KSize, this.hashMode), CombinationalLogic.count(SC.read(), BranchResult.isTaken(actual), CountMode.SATURATING));
+        Bit[] fuck = this.getCacheEntry(branchInstruction.getInstructionAddress());
+        Bit[] count = CombinationalLogic.count(SC.read(), BranchResult.isTaken(actual), CountMode.SATURATING);
+        PSPHT.put(fuck, count);
+        BHR.insert(Bit.of(BranchResult.isTaken(actual)));
+        //PSPHT.put(CombinationalLogic.count(this.getCacheEntry(branchInstruction.getInstructionAddress()), this.KSize, this.hashMode), CombinationalLogic.count(SC.read(), BranchResult.isTaken(actual), CountMode.SATURATING));
     }
 
     /**
