@@ -43,7 +43,11 @@ public class GAg implements BranchPredictor {
     public BranchResult predict(BranchInstruction branchInstruction) {
         // TODO : complete Task 1
         // =  new SIPORegister("sc",PHT.get(BHR.read()).length , PHT.get(BHR.read()));
-        SC.load(PHT.get(BHR.read()));
+        if(PHT.get(BHR.read()) == null){
+            SC.load(getDefaultBlock());
+        }else {
+            SC.load(PHT.get(BHR.read()));
+        }
         if (SC.read()[0].getValue())
             return BranchResult.TAKEN;
         return BranchResult.NOT_TAKEN;
@@ -70,7 +74,7 @@ public class GAg implements BranchPredictor {
         //SC.load();
 
         PHT.put(BHR.read(), CombinationalLogic.count(SC.read(),n,CountMode.SATURATING));
-        
+
 
         BHR.insert(Bit.of(n));
     }
